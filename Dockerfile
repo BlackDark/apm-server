@@ -24,5 +24,13 @@ RUN make
 
 CMD ./apm-server -e -d "*"
 
+# Remove root permissions from user
+USER root
+
+RUN gpasswd -d apm-server root && \
+    chown -R apm-server:apm-server /usr/share/apm-server
+
+USER apm-server
+
 # Add healthcheck for docker/healthcheck metricset to check during testing
 HEALTHCHECK CMD exit 0
